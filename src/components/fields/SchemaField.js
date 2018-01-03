@@ -95,7 +95,6 @@ function DefaultTemplate(props) {
     classNames,
     label,
     children,
-    errors,
     help,
     description,
     hidden,
@@ -111,7 +110,7 @@ function DefaultTemplate(props) {
       {displayLabel && <Label label={label} required={required} id={id} />}
       {displayLabel && description ? description : null}
       {children}
-      {errors}
+      {/*errors*/}
       {help}
     </div>
   );
@@ -203,6 +202,7 @@ function SchemaFieldRender(props) {
       autofocus={autofocus}
       errorSchema={fieldErrorSchema}
       formContext={formContext}
+      errors={__errors}
     />
   );
 
@@ -227,7 +227,7 @@ function SchemaFieldRender(props) {
     .join(" ")
     .trim();
 
-  const fieldProps = {
+  var fieldProps = {
     description: (
       <DescriptionField
         id={id + "__description"}
@@ -253,6 +253,7 @@ function SchemaFieldRender(props) {
     schema,
     uiSchema,
   };
+  // fieldProps.required = false;
 
   return <FieldTemplate {...fieldProps}>{field}</FieldTemplate>;
 }

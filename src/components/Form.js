@@ -192,7 +192,7 @@ export default class Form extends Component {
         acceptCharset={acceptcharset}
         noValidate={noHtml5Validate}
         onSubmit={this.onSubmit}>
-        {this.renderErrors()}
+        {/*this.renderErrors()*/}
         <_SchemaField
           schema={schema}
           uiSchema={uiSchema}

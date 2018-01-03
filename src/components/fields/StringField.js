@@ -24,6 +24,7 @@ function StringField(props) {
     onBlur,
     onFocus,
     registry = getDefaultRegistry(),
+    errors,
   } = props;
   const { title, format } = schema;
   const { widgets, formContext } = registry;
@@ -51,6 +52,7 @@ function StringField(props) {
       autofocus={autofocus}
       registry={registry}
       placeholder={placeholder}
+      errors={errors}
     />
   );
 }

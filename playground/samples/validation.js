@@ -11,6 +11,10 @@ function transformErrors(errors) {
       return Object.assign({}, error, {
         message: "You need to be 18 because of some legal thing",
       });
+    } else if (error.name === "required") {
+      return Object.assign({}, error, {
+        message: "this field is required",
+      });
     }
     return error;
   });
@@ -39,6 +43,7 @@ module.exports = {
         minimum: 18,
       },
     },
+    required: ["pass1", "pass2"],
   },
   uiSchema: {
     pass1: { "ui:widget": "password" },

@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import BaseInput from "./BaseInput";
+
 function URLWidget(props) {
-  const { BaseInput } = props.registry.widgets;
   return <BaseInput type="url" {...props} />;
 }
 

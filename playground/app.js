@@ -455,6 +455,7 @@ class App extends Component {
               ArrayFieldTemplate={ArrayFieldTemplate}
               ObjectFieldTemplate={ObjectFieldTemplate}
               liveValidate={liveValidate}
+              noHtml5Validate={true}
               schema={schema}
               uiSchema={uiSchema}
               formData={formData}

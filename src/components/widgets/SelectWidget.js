@@ -1,7 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-
 import { asNumber } from "../../utils";
+import SelectField from "material-ui/SelectField";
+import MenuItem from "material-ui/MenuItem";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 /**
  * This is a silly limitation in the DOM where option change event values are
@@ -24,14 +26,14 @@ function processValue({ type, items }, value) {
   return value;
 }
 
-function getValue(event, multiple) {
+function getValue(event, index, value, multiple) {
   if (multiple) {
     return [].slice
       .call(event.target.options)
       .filter(o => o.selected)
       .map(o => o.value);
   } else {
-    return event.target.value;
+    return value;
   }
 }
 
@@ -51,45 +53,48 @@ function SelectWidget(props) {
     onFocus,
     placeholder,
   } = props;
-  const { enumOptions, enumDisabled } = options;
+  const { enumOptions } = options;
   const emptyValue = multiple ? [] : "";
   return (
-    <select
-      id={id}
-      multiple={multiple}
-      className="form-control"
-      value={typeof value === "undefined" ? emptyValue : value}
-      required={required}
-      disabled={disabled || readonly}
-      autoFocus={autofocus}
-      onBlur={
-        onBlur &&
-        (event => {
-          const newValue = getValue(event, multiple);
-          onBlur(id, processValue(schema, newValue));
-        })
-      }
-      onFocus={
-        onFocus &&
-        (event => {
-          const newValue = getValue(event, multiple);
-          onFocus(id, processValue(schema, newValue));
-        })
-      }
-      onChange={event => {
-        const newValue = getValue(event, multiple);
-        onChange(processValue(schema, newValue));
-      }}>
-      {!multiple && !schema.default && <option value="">{placeholder}</option>}
-      {enumOptions.map(({ value, label }, i) => {
-        const disabled = enumDisabled && enumDisabled.indexOf(value) != -1;
-        return (
-          <option key={i} value={value} disabled={disabled}>
-            {label}
-          </option>
-        );
-      })}
-    </select>
+    <MuiThemeProvider>
+      <SelectField
+        id={id}
+        multiple={multiple}
+        // className="form-control"
+        value={typeof value === "undefined" ? emptyValue : value}
+        required={required}
+        disabled={disabled || readonly}
+        autoFocus={autofocus}
+        onBlur={
+          onBlur &&
+          ((event, index, value) => {
+            const newValue = getValue(event, index, value, multiple);
+            onBlur(id, processValue(schema, newValue));
+          })
+        }
+        onFocus={
+          onFocus &&
+          ((event, index, value) => {
+            const newValue = getValue(event, index, value, multiple);
+            onFocus(id, processValue(schema, newValue));
+          })
+        }
+        onChange={(event, index, value) => {
+          const newValue = getValue(event, index, value, multiple);
+          onChange(processValue(schema, newValue));
+        }}>
+        {!multiple &&
+          !schema.default && (
+            <MenuItem
+              value=""
+              primaryText={placeholder ? placeholder : "Select"}
+            />
+          )}
+        {enumOptions.map(({ value, label }, i) => {
+          return <MenuItem key={i} value={value} primaryText={label} />;
+        })}
+      </SelectField>
+    </MuiThemeProvider>
   );
 }
 

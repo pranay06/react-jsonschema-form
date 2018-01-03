@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import TextField from "material-ui/TextField";
 
 function BaseInput(props) {
   // Note: since React 15.2.0 we can't forward unknown element attributes, so we
@@ -15,6 +17,8 @@ function BaseInput(props) {
     schema,
     formContext,
     registry,
+    errors,
+    label,
     ...inputProps
   } = props;
 
@@ -22,18 +26,28 @@ function BaseInput(props) {
   const _onChange = ({ target: { value } }) => {
     return props.onChange(value === "" ? options.emptyValue : value);
   };
+  let errorsString = "";
+  if (typeof errors !== "undefined") {
+    errorsString = errors.join("<br />");
+  }
   return (
-    <input
-      className="form-control"
-      readOnly={readonly}
-      disabled={disabled}
-      autoFocus={autofocus}
-      value={value == null ? "" : value}
-      {...inputProps}
-      onChange={_onChange}
-      onBlur={onBlur && (event => onBlur(inputProps.id, event.target.value))}
-      onFocus={onFocus && (event => onFocus(inputProps.id, event.target.value))}
-    />
+    <MuiThemeProvider>
+      <TextField
+        //className="form-control"
+        floatingLabelText={label}
+        readOnly={readonly}
+        errorText={errorsString !== "" ? errorsString : undefined}
+        disabled={disabled}
+        autoFocus={autofocus}
+        value={value == null ? "" : value}
+        {...inputProps}
+        onChange={_onChange}
+        onBlur={onBlur && (event => onBlur(inputProps.id, event.target.value))}
+        onFocus={
+          onFocus && (event => onFocus(inputProps.id, event.target.value))
+        }
+      />
+    </MuiThemeProvider>
   );
 }
 
